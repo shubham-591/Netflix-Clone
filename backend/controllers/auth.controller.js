@@ -32,7 +32,7 @@ export async function signup(req, res) {
         const salt = await bcryptjs.genSalt(10);
         const hashedPassword = await bcryptjs.hash(password, salt);
 
-        const PROFILE_PICS = ["../assets/avatar1.png", "../assets/avatar2.jpg", "../assets/avatar3.png"]
+        const PROFILE_PICS = ["/avatar1.png", "/avatar2.png", "/avatar3.png"]
         const image = PROFILE_PICS[Math.floor(Math.random() * PROFILE_PICS.length)];  // This will basically give us random images(their index like 0,1,2) from the three above
 
         const newUser = new User({
@@ -111,6 +111,16 @@ export async function logout(req, res) {
 
     } catch (error) {
         console.log("Error in logout controller:", error.message);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+}
+
+export async function authCheck(req, res) {
+    try {
+        
+        res.status(200).json({success: true, user: req.user});
+    } catch (error) {
+        console.log("Error in authCheck controller:", error.message);
         res.status(500).json({ success: false, message: "Internal server error" });
     }
 }
